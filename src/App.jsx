@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 
+import NoteCard from './components/NoteCard.jsx';
+import NoteForm from './components/NoteForm.jsx';
+import Filter from './components/Filter.jsx';
+
 function App() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState('');
@@ -39,58 +43,24 @@ function App() {
   const filteredNotes = showImportantOnly ? notes.filter(note => note.important) : notes;
 
   return (
-    <div style = {{ padding: '20px' }}>
+    <div style={{ padding: '20px' }}>
       <h1>Мои заметки</h1>
-
-      <div className="form-container">
-        <input
-          type="text"
-          placeholder="Заголовок"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="input-field"/>
-        <input
-          type="text"
-          placeholder="Текст"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="input-field"/>
-        <button className="add-button" onClick={addNote}>Добавить</button>
-      </div>
-
-      <div className="filter-container">
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            checked={showImportantOnly}
-            onChange={(e) => setShowImportantOnly(e.target.checked)}
-            style={{ marginRight: '8px' }}/>{' '}
-          Только важные
-        </label>
-      </div>
-
+      <NoteForm
+        title={title}
+        setTitle={setTitle}
+        text={text}
+        setText={setText}
+        addNote={addNote}/>
+      <Filter
+        showImportantOnly={showImportantOnly}
+        setShowImportantOnly={setShowImportantOnly}/>
       <div className="notes-list">
         {filteredNotes.map((note) => (
-          <div
+          <NoteCard
             key={note.id}
-            className={`note-card ${note.important ? 'important' : ''}`}>
-            <h3 className="note-title">{note.title}</h3>
-            <div className="note-text">{note.text}</div>
-            <div className="note-actions">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={note.important}
-                  onChange={() => toggleImportant(note.id)}/>{' '}
-                Важная
-              </label>
-              <button
-                className="delete-button"
-                onClick={() => deleteNote(note.id)}>
-                Удалить
-              </button>
-            </div>
-          </div>
+            note={note}
+            toggleImportant={toggleImportant}
+            deleteNote={deleteNote}/>
         ))}
       </div>
     </div>
