@@ -1,5 +1,6 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useMemo } from 'react';
 import './App.css';
+
 import NoteCard from './components/NoteCard.jsx';
 import NoteForm from './components/NoteForm.jsx';
 import Filter from './components/Filter.jsx';
@@ -51,7 +52,9 @@ function App() {
     dispatch({ type: 'TOGGLE_IMPORTANT', payload: { id } });
   };
 
-  const filteredNotes = showImportantOnly ? notes.filter(note => note.important) : notes;
+  const filteredNotes = useMemo(() => {
+    return showImportantOnly ? notes.filter(note => note.important) : notes;
+  }, [notes, showImportantOnly]);
 
   return (
     <div style={{ padding: '20px' }}>
